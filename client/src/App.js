@@ -17,8 +17,13 @@ function App() {
   const addNewNumber = () => {
     Axio.post('http://localhost:8080/add-phone', { name, phone })
       .then((response) => {
+        console.log(phonebook)
+        console.log("the first time")
+
         setPhonebook(prevPhonebook => [...prevPhonebook, response.data.data.phoneNumber]);
         getNumbers();
+        
+        console.log(phonebook)
       })
       .catch((error) => {
         console.log(error);
@@ -28,7 +33,7 @@ function App() {
   const getNumbers = () => {
     Axio.get('http://localhost:8080/get-phone')
       .then((response) => {
-        console.log("dddddddd");
+        console.log("dddddddd");    
         setPhonebook(response.data.data.phoneNumbers);
       })
       .catch((error) => {
@@ -39,6 +44,8 @@ function App() {
   const updateNumber = (id) => {
     Axio.put('http://localhost:8080/update-phone', { id: id, name: updatedName, phone: updatedPhone })
       .then((response) => {
+        console.log(phonebook)
+
         setShowUpdate(false);
         getNumbers();
       })
@@ -83,11 +90,17 @@ function App() {
 
       <ul className="phonebook">
         {phonebook.map((entry, i) => (
+          
           <div>
-            <li className='contact-tile' key={i}>
+            {entry ?  <li className='contact-tile' key={i}>
               <div className="entry-details">
+                <div>
                 <div className="entry-name">{entry.name}</div>
+         
+
                 <div className="entry-phone">{entry.phone}</div>
+                </div> 
+                
               </div>
               <div className="entry-actions">
                 <button className="delete-btn" onClick={() => deleteNumber(entry)}>
@@ -113,7 +126,8 @@ function App() {
                   </div>
                 </div>
               )}
-            </li>
+            </li> : <div></div> 
+          }
           </div>
         ))}
       </ul>
